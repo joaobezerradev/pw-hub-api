@@ -3,9 +3,6 @@ export interface ConfirmAccount {
 }
 
 export namespace ConfirmAccount {
-  export interface Input {
-    email: string
-    token: string
-  }
+  export interface Input { email: string; token: string }
   export type Output = Promise<void>
 }

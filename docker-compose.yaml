@@ -23,4 +23,14 @@ services:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER:  ${BROKER_USER}
+      RABBITMQ_DEFAULT_PASS:  ${BROKER_PASS}
+    ports:
+      - 5672:5672
+      - 15672:15672
+
 
