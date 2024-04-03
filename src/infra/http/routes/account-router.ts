@@ -3,7 +3,7 @@ import { Router } from 'express'
 import { type DatabaseConnectionInterface } from '../../adapters/contracts'
 import { accountControllerFactory } from '../../factories'
 
-const makeAccountRouter = async (databaseConnection: DatabaseConnectionInterface<PrismaClient>): Promise<Router> => {
+const makeAccountRouter =  (databaseConnection: DatabaseConnectionInterface<PrismaClient>): Router => {
   const accountController = accountControllerFactory(databaseConnection)
 
   const accountRouter = Router()

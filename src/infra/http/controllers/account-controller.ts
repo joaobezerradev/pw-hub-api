@@ -1,12 +1,13 @@
 import { type Request, type Response } from 'express'
 import { z } from 'zod'
 import { type CreateAccount } from '../../../application/commands/contracts'
+import { HttpException } from '../../../domain/errors'
 import { passwordSchema } from '../../validation'
 
 export class AccountController {
-  constructor (private readonly createAccountCommand: CreateAccount) { }
+  constructor(private readonly createAccountCommand: CreateAccount) { }
 
-  async createAccount (req: Request, res: Response): Promise<Response> {
+  async createAccount(req: Request, res: Response): Promise<Response> {
     const schema = z.object({
       email: z.string().email(),
       username: z.string().max(15),
@@ -21,7 +22,9 @@ export class AccountController {
       if (error instanceof z.ZodError) {
         return res.status(400).send({ errors: error.errors })
       }
-      console.error(error)
+      if (error instanceof HttpException) {
+        return res.status(error.code).send({ error: error.message })
+      }
       return res.status(500).send({ error: 'Internal server error' })
     }
   }
