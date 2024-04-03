@@ -1,6 +1,6 @@
 import { Account } from '../../domain/entities/account'
 import { HttpException } from '../../domain/errors'
-import { type AccountRepositoryInterface } from '../../domain/repositories/account-repository'
+import { type AccountRepositoryInterface } from '../../domain/repositories'
 import { type HasherInterface } from '../../infra/adapters/contracts'
 import { type CreateAccount } from './contracts'
 
