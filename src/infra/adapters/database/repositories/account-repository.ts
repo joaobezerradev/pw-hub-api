@@ -10,21 +10,20 @@ export class AccountRepository implements AccountRepositoryInterface {
     const data = await this.connection.getConnection().account.findFirst({
       where: input as any
     })
-    return data ? new Account(data) : null
+    return data ? new Account(data as any) : null
   }
 
   async finBy (input: Partial<Account>): Promise<Account[]> {
     const data = await this.connection.getConnection().account.findMany({
       where: input as any
     })
-    return data.map(data => new Account(data))
+    return data.map(data => new Account(data  as any))
   }
 
   async save (data: Account): Promise<void> {
     await this.connection.getConnection().account.upsert({
       create: {
         ...data
-
       },
       where: { id: data.id },
       update: data as any
