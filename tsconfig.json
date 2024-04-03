@@ -10,6 +10,12 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "useUnknownInCatchVariables": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": [
+      "./src/infra/http/types"
+    ],
+    "types": [
+      "express"
+    ],
   }
 }

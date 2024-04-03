@@ -13,5 +13,6 @@ const DATABASE_NAME = env.get('DATABASE_NAME').required().asString()
 
 export const environment = {
   app: { port: APP_PORT },
+  jwt: { secret: '' },
   db: { type: DATABASE_TYPE, port: DATABASE_PORT, pass: DATABASE_PASSWORD, user: DATABASE_USER, host: DATABASE_HOST, name: DATABASE_NAME }
 }
