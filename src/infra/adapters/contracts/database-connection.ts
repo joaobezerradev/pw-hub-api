@@ -1,3 +1,3 @@
-export interface DatabaseConnection<T> {
+export interface DatabaseConnectionInterface<T = any> {
   getConnection: () => T
 }

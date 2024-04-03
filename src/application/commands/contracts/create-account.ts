@@ -3,6 +3,6 @@ export interface CreateAccount {
 }
 
 export namespace CreateAccount {
-  export interface Input { email: string; password: string }
+  export interface Input { username: string, email: string, password: string }
   export type Output = Promise<void>
 }

@@ -7,11 +7,15 @@ services:
       - 3333:3333
     depends_on:
       - database
+      - rabbitmq
     environment:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_NAME: ${DATABASE_NAME}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${BROKER_USER}
+      RABBITMQ_PASSWORD: ${BROKER_PASS}
 
   database:
     image: mysql:5.7
@@ -22,6 +26,8 @@ services:
     environment:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - ./.docker/mysql_data:/var/lib/mysql
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -32,5 +38,8 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    volumes:
+      - ./.docker/rabbitmq_data:/var/lib/rabbitmq
+      - ./.docker/rabbitmq_logs:/var/log/rabbitmq
 
 

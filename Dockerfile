@@ -1,10 +1,13 @@
 FROM node:20-alpine
 
+RUN apk update && \
+    apk add --no-cache git
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm i
 
 COPY . .
 

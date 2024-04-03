@@ -1,1 +1,1 @@
-export * from './typeorm'
+export * from './database-connection-adapter'
