@@ -1,3 +1,6 @@
 export * from './change-account-password'
 export * from './create-account'
 export * from './send-account-verification'
+export * from './account-request-reset-password-token'
+export * from './confirm-account'
+export * from './auth-account'

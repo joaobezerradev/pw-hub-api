@@ -11,8 +11,8 @@ export class CreateAccountCommand implements CreateAccount {
   ) { }
 
   async execute(input: CreateAccount.Input): CreateAccount.Output {
-    const accountEmailExistsPromise = await this.accountRepository.finOneBy({ email: input.email.toLowerCase() })
-    const accountUsernameExistsPromise = await this.accountRepository.finOneBy({ username: input.username.toLowerCase() })
+    const accountEmailExistsPromise = await this.accountRepository.finOneBy({ email: input.email })
+    const accountUsernameExistsPromise = await this.accountRepository.finOneBy({ username: input.username })
 
     const [accountEmailExists, accountUsernameExists] = await Promise.all([accountEmailExistsPromise, accountUsernameExistsPromise])
 

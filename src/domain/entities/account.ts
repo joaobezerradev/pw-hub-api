@@ -2,8 +2,9 @@ import { BaseEntity } from './base-entity'
 import { randomUUID as uuid } from 'node:crypto'
 import { AccountRole } from '../constants/account-role'
 import { type AccountTokenType } from '../constants/account-token-type'
+import { environment } from '../../infra/config/environment'
 
-interface Token { id: string, typeId: string, code: string }
+interface Token { id: string, typeId: string, code: string, expiresAt: Date, createdAt: Date, updatedAt: Date, deletedAt: Date | null }
 
 export class Account extends BaseEntity {
   email: string
@@ -17,12 +18,13 @@ export class Account extends BaseEntity {
   profile: Record<string, unknown>
   tokens: Token[]
 
-  constructor (data: Partial<Account>) {
+  constructor(data: Partial<Account>) {
     super()
+    this.tokens = []
     Object.assign(this, data)
   }
 
-  static create (data: Account.Create): Account {
+  static create(data: Account.Create): Account {
     return new Account({
       id: uuid(),
       email: data.email,
@@ -38,23 +40,45 @@ export class Account extends BaseEntity {
     })
   }
 
-  canResendEmailConfirmation (): boolean {
+  canResendEmailConfirmation(): boolean {
     if (!this.emailSentAt) return true
-    const now = new Date()
-    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000)
-    return this.emailSentAt <= oneHourAgo
+    const expireTime = new Date(Date.now() - 60 * environment.app.tokenAccountExpiresInMinutes * 1000)
+    return this.emailSentAt <= expireTime
   }
 
-  storeToken (token: string, type: AccountTokenType): void {
+  storeToken(code: string, type: AccountTokenType): void {
     this.tokens.push({
       id: uuid(),
-      code: token,
-      typeId: type
+      code: code,
+      typeId: type,
+      expiresAt: new Date(Date.now() + 60 * environment.app.tokenAccountExpiresInMinutes * 1000),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null
     })
   }
 
-  markEmailAsSent (now = new Date()): void {
+  removeToken(code: string, type: AccountTokenType): void {
+    const token = this.tokens.find(token => token.code === code && type === token.typeId)
+    if (token) token.deletedAt = new Date()
+  }
+
+  isValidToken(code: string, type: AccountTokenType): boolean {
+    const token = this.tokens.find(token => token.code === code && token.typeId === type)
+    if (!token) return false
+    return token.expiresAt.getTime() < Date.now()
+  }
+
+  updatePassword(password: string): void {
+    this.password = password
+  }
+
+  markEmailAsSent(now = new Date()): void {
     this.emailSentAt = now
+  }
+
+  confirm(now = new Date()): void {
+    this.emailConfirmedAt = now
   }
 }
 

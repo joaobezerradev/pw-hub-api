@@ -3,7 +3,7 @@ import os from 'node:os'
 import express, { NextFunction, Request, Response } from 'express'
 import fs from 'node:fs/promises'
 import path from 'path'
-import { DatabaseConnectionAdapter } from './infra/adapters/database'
+import { DatabaseConnectionAdapter } from './infra/database'
 import { environment } from './infra/config/environment'
 
 const app = express()

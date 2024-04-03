@@ -5,9 +5,8 @@ export interface ChangeAccountPassword {
 export namespace ChangeAccountPassword {
   export interface Input {
     email: string
-    oldPassword: string
+    token: string
     password: string
-    passwordConfirmation: string
   }
   export type Output = Promise<void>
 }

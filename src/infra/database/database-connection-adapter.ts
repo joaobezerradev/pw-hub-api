@@ -1,6 +1,6 @@
 import { type Prisma, PrismaClient } from '@prisma/client'
 import { type DefaultArgs } from '@prisma/client/runtime/library'
-import { type DatabaseConnectionInterface } from '../contracts'
+import { type DatabaseConnectionInterface } from '../adapters/contracts'
 
 export class DatabaseConnectionAdapter implements DatabaseConnectionInterface<PrismaClient> {
   private readonly prismaClient: PrismaClient

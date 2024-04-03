@@ -94,18 +94,18 @@ model ProfileBadge {
 }
 
 model AccountToken {
-  id                 String           @id @db.VarChar(36)
-  token              String           @db.VarChar(80)
-  expiresAt          DateTime         @map("expires_at")
-  account            Account          @relation(fields: [accountId], references: [id])
-  accountId          String           @map("account_id") @db.VarChar(36)
-  createdAt          DateTime         @map("created_at")
-  updatedAt          DateTime         @map("updated_at")
-  deletedAt          DateTime?        @map("deleted_at")
-  type               AccountTokenType @relation(fields: [accountTokenTypeId], references: [id])
-  accountTokenTypeId String           @map("account_token_type_id") @db.VarChar(36)
+  id        String           @id @db.VarChar(36)
+  code      String           @db.VarChar(100)
+  expiresAt DateTime         @map("expires_at")
+  account   Account          @relation(fields: [accountId], references: [id])
+  accountId String           @map("account_id") @db.VarChar(36)
+  createdAt DateTime         @map("created_at")
+  updatedAt DateTime         @map("updated_at")
+  deletedAt DateTime?        @map("deleted_at")
+  type      AccountTokenType @relation(fields: [typeId], references: [id])
+  typeId    String           @map("account_token_type_id") @db.VarChar(36)
 
-  @@index([token, accountId])
+  @@index([code, accountId, typeId])
   @@map("account_token")
 }
 

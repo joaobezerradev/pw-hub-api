@@ -1,2 +1,5 @@
 export * from './create-account-command'
 export * from './send-account-verification-command'
+export * from './change-account-password-command'
+export * from './account-request-reset-password-token-command'
+export * from './auth-account-command'
