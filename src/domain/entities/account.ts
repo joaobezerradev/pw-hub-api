@@ -58,6 +58,15 @@ export class Account extends BaseEntity {
     })
   }
 
+  canResendToken(type: AccountTokenType): boolean {
+    const token = this.tokens.find(token => token.typeId === type);
+    if (!token) return true;
+    const expireTime = token.expiresAt.getTime();
+    const canResend = Date.now() > expireTime
+    if (canResend) token.deletedAt = new Date()
+    return canResend
+  }
+
   removeToken(code: string, type: AccountTokenType): void {
     const token = this.tokens.find(token => token.code === code && type === token.typeId)
     if (token) token.deletedAt = new Date()

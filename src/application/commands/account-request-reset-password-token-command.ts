@@ -17,6 +17,10 @@ export class AccountRequestResetPasswordTokenCommand implements AccountRequestRe
 
     if (!account) throw new HttpException('Account email not found', 404)
 
+    if (!account.canResendToken(AccountTokenType.RESET_PASSWORD)) {
+      throw new HttpException('A reset password token is still active. Please wait until it expires or use it to reset your password.', 422);
+    }
+
     let code: string
     let isUniqueCode: boolean
 
@@ -24,6 +28,8 @@ export class AccountRequestResetPasswordTokenCommand implements AccountRequestRe
       code = this.generateToken()
       isUniqueCode = account.tokens.some(token => token.typeId === AccountTokenType.RESET_PASSWORD && token.code === code)
     } while (isUniqueCode)
+
+
 
     account.storeToken(code, AccountTokenType.RESET_PASSWORD)
 
