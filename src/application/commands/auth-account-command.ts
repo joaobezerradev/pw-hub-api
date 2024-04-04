@@ -14,7 +14,7 @@ export class AuthAccountCommand implements AuthAccount {
   async execute(input: AuthAccount.Input): AuthAccount.Output {
     const account = await this.accountRepository.finOneBy({ email: input.email })
 
-    if (!account) throw new HttpException('Account invalid credentials', 422)
+    if (!account) throw new HttpException('Account email not found', 404)
 
     const isValid = await this.hasher.compare(input.password, account.password)
 

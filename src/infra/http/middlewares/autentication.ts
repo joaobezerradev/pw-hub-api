@@ -6,9 +6,10 @@ export const autenticationMiddleware = (req: Request, res: Response, next: NextF
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: 'Token is missing.' });
   const [, token] = authHeader.split(' ');
+
   try {
-    const decoded = jwt.verify(token, environment.jwt.secret);
-    req.user = { id: decoded as string } 
+    const decoded = jwt.verify(token, environment.jwt.secret) as { id: string }
+    req.user = { id: decoded.id }
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid token.' });

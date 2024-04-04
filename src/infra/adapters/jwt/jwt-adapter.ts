@@ -1,11 +1,18 @@
 import jwt from 'jsonwebtoken';
+import { environment } from '../../config/environment';
 import { JwtInterface } from '../contracts';
 
 export class JwtAdapter implements JwtInterface {
-  constructor(private readonly secretKey: string) { }
+  private readonly secretKey: string
+  private readonly expiresIn: string
 
-  generateToken(payload: object, expiresIn: string | number): string {
-    return jwt.sign(payload, this.secretKey, { expiresIn });
+  constructor() {
+    this.secretKey = environment.jwt.secret
+    this.expiresIn = environment.jwt.expirationIn
+  }
+
+  generateToken(payload: object): string {
+    return jwt.sign(payload, this.secretKey, { expiresIn: this.expiresIn });
   }
 
 }
