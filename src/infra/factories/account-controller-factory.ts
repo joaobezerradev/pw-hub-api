@@ -1,5 +1,5 @@
 import { type PrismaClient } from '@prisma/client'
-import { AccountRequestResetPasswordTokenCommand, AuthAccountCommand, ChangeAccountPasswordCommand, CreateAccountCommand, SendAccountVerificationCommand } from '../../application/commands'
+import { AccountRequestResetPasswordTokenCommand, AuthenticateAccountCommand, ChangeAccountPasswordCommand, CreateAccountCommand, SendAccountVerificationCommand } from '../../application/commands'
 import { type DatabaseConnectionInterface } from '../adapters/contracts'
 import { AccountRepository } from '../database/repositories'
 import { HasherAdapter } from '../adapters/hasher/hasher-adapter'
@@ -18,7 +18,7 @@ export const accountControllerFactory = (databaseConnection: DatabaseConnectionI
   const changeAccountPasswordCommand = new ChangeAccountPasswordCommand(accountRepository, hasher)
   const accountRequestResetPasswordTokenCommand = new AccountRequestResetPasswordTokenCommand(accountRepository, mailer)
   const sendAccountVerificationCommand = new SendAccountVerificationCommand(accountRepository, hasher, mailer)
-  const autenticateAccountCommand = new AuthAccountCommand(accountRepository, hasher, jwt)
+  const authenticateAccountCommand = new AuthenticateAccountCommand(accountRepository, hasher, jwt)
   const confirmAccountCommand = new ConfirmAccountCommand(accountRepository)
   const getAccountQuery = new GetAccountQuery(accountRepository)
 
@@ -27,7 +27,7 @@ export const accountControllerFactory = (databaseConnection: DatabaseConnectionI
     changeAccountPasswordCommand,
     accountRequestResetPasswordTokenCommand,
     sendAccountVerificationCommand,
-    autenticateAccountCommand,
+    authenticateAccountCommand,
     getAccountQuery,
     confirmAccountCommand
   )

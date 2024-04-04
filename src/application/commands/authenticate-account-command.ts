@@ -2,16 +2,16 @@ import { HttpException } from '../../domain/errors'
 import { type AccountRepositoryInterface } from '../../domain/repositories'
 import { JwtInterface, type HasherInterface } from '../../infra/adapters/contracts'
 import { environment } from '../../infra/config/environment'
-import { AuthAccount } from './contracts'
+import { AuthenticateAccount } from './contracts'
 
-export class AuthAccountCommand implements AuthAccount {
+export class AuthenticateAccountCommand implements AuthenticateAccount {
   constructor(
     private readonly accountRepository: AccountRepositoryInterface,
     private readonly hasher: HasherInterface,
     private readonly jwt: JwtInterface
   ) { }
 
-  async execute(input: AuthAccount.Input): AuthAccount.Output {
+  async execute(input: AuthenticateAccount.Input): AuthenticateAccount.Output {
     const account = await this.accountRepository.finOneBy({ email: input.email })
 
     if (!account) throw new HttpException('Account email not found', 404)

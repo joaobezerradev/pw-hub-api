@@ -1,6 +1,6 @@
 import { type Request, Response } from 'express'
 import { z } from 'zod'
-import { AccountRequestResetPasswordToken, AuthAccount, ChangeAccountPassword, ConfirmAccount, SendAccountVerification, type CreateAccount } from '../../../application/commands/contracts'
+import { AccountRequestResetPasswordToken, AuthenticateAccount, ChangeAccountPassword, ConfirmAccount, SendAccountVerification, type CreateAccount } from '../../../application/commands/contracts'
 import { GetAccount } from '../../../application/queries/contracts'
 import { passwordSchema } from '../../validation'
 import { handleError } from '../utils/handle-http-exception'
@@ -11,7 +11,7 @@ export class AccountController {
     private readonly changeAccountPasswordCommand: ChangeAccountPassword,
     private readonly accountRequestResetPasswordTokenCommand: AccountRequestResetPasswordToken,
     private readonly sendAccountVerificationCommand: SendAccountVerification,
-    private readonly authAccountCommand: AuthAccount,
+    private readonly authenticateAccountCommand: AuthenticateAccount,
     private readonly getAccountQuery: GetAccount,
     private readonly confirmAccountCommand: ConfirmAccount
   ) { }
@@ -74,7 +74,7 @@ export class AccountController {
     const schema = z.object({ email: z.string().email(), password: passwordSchema })
     try {
       const validatedData = schema.parse(req.body)
-      const response = await this.authAccountCommand.execute(validatedData)
+      const response = await this.authenticateAccountCommand.execute(validatedData)
       return res.json(response)
     } catch (error) {
       return handleError(error, res)
