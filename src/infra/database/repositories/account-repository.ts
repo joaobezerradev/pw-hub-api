@@ -157,7 +157,7 @@ export class AccountRepository implements AccountRepositoryInterface {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       tokens: data.tokens?.filter((tokens: { deletedAt: Date | null }) => !tokens.deletedAt),
-      badges: data?.profile[0].profileBadge?.map((profileBadge: { badge: { id: string } }) => ({ id: profileBadge.badge.id })) ?? [],
+      badges: data?.profile[0]?.profileBadge?.map((profileBadge: { badge: { id: string } }) => ({ id: profileBadge.badge.id })) ?? [],
       profile: {
         aboutMe: data.profile.at(0)?.aboutMe!,
         address: data.profile.at(0)?.address!,
