@@ -3,6 +3,7 @@ import { randomUUID as uuid } from 'node:crypto'
 import { AccountRole } from '../constants/account-role'
 import { type AccountTokenType } from '../constants/account-token-type'
 import { environment } from '../../infra/config/environment'
+import { Badge } from '../constants'
 
 interface Token { id: string, typeId: string, code: string, expiresAt: Date, createdAt: Date, updatedAt: Date, deletedAt: Date | null }
 
@@ -15,12 +16,21 @@ export class Account extends BaseEntity {
   lastAccessAt: Date
   isOnline: boolean
   roleId: AccountRole
-  profile: Record<string, unknown>
+  profile: { name: string, aboutMe: string, address: string, birthdate: string, phone: string, }
+  badges: { id: string; }[]
   tokens: Token[]
 
   constructor(data: Partial<Account>) {
     super()
     this.tokens = []
+    this.badges = []
+    this.profile = {
+      name: '',
+      aboutMe: '',
+      address: '',
+      birthdate: '',
+      phone: '',
+    }
     Object.assign(this, data)
   }
 
@@ -75,7 +85,7 @@ export class Account extends BaseEntity {
   isValidToken(code: string, type: AccountTokenType): boolean {
     const token = this.tokens.find(token => token.code === code && token.typeId === type)
     if (!token) return false
-    return token.expiresAt.getTime() < Date.now()
+    return token.expiresAt.getTime() > Date.now()
   }
 
   updatePassword(password: string): void {
@@ -88,6 +98,11 @@ export class Account extends BaseEntity {
 
   confirm(now = new Date()): void {
     this.emailConfirmedAt = now
+    this.badges.push({ id: Badge.ACCOUNT_VERIFIED })
+  }
+
+  updateProfile(data: Account['profile']): void {
+    this.profile = data
   }
 }
 

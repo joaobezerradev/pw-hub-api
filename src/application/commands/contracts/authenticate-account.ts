@@ -4,5 +4,5 @@ export interface AuthenticateAccount {
 
 export namespace AuthenticateAccount {
   export type Input = { email: string, password: string }
-  export type Output = Promise<{ token: string }>
+  export type Output = Promise<{ accessToken: string, refreshToken: string }>
 }

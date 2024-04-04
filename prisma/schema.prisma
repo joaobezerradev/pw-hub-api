@@ -57,7 +57,7 @@ model AccountProfile {
   birthdate        String         @db.VarChar(10)
   phone            String         @db.VarChar(15)
   account          Account        @relation(fields: [accountId], references: [id])
-  accountId        String         @map("account_id") @db.VarChar(36)
+  accountId        String         @unique @map("account_id") @db.VarChar(36)
   createdAt        DateTime       @map("created_at")
   updatedAt        DateTime       @map("updated_at")
   deletedAt        DateTime?      @map("deleted_at")
@@ -90,6 +90,8 @@ model ProfileBadge {
   updatedAt        DateTime       @map("updated_at")
   deletedAt        DateTime?      @map("deleted_at")
 
+  @@unique([badgeId, accountProfileId])
+  @@index([badgeId, accountProfileId])
   @@map("profile_badge")
 }
 

@@ -4,7 +4,7 @@ services:
   app:
     build: .
     ports:
-      - 3333:3333
+      - 4444:4444
     depends_on:
       - database
     environment:
@@ -25,7 +25,5 @@ services:
     environment:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-    volumes:
-      - ./.docker/mysql_data:/var/lib/mysql
 
 

@@ -14,14 +14,19 @@ export class AuthenticateAccountCommand implements AuthenticateAccount {
   async execute(input: AuthenticateAccount.Input): AuthenticateAccount.Output {
     const account = await this.accountRepository.finOneBy({ email: input.email })
 
-    if (!account) throw new HttpException('Account email not found', 404)
+    if (!account) throw new HttpException('Account invalid credentials', 422)
 
     const isValid = await this.hasher.compare(input.password, account.password)
 
     if (!isValid) throw new HttpException('Account invalid credentials', 422)
 
-    return {
-      token: this.jwt.generateToken({ id: account.id }, environment.jwt.expirationIn)
-    }
+    const payload = { id: account.id, roleId: account.roleId }
+
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwt.generateToken(payload, environment.jwt.expirationIn),
+      this.jwt.generateToken(payload, environment.jwt.refreshExpirationIn)
+    ])
+
+    return { accessToken, refreshToken }
   }
 }

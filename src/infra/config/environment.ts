@@ -17,7 +17,8 @@ export const environment = {
   },
   jwt: {
     secret: env.get('JWT_SECRET').required().asString(),
-    expirationIn: env.get('JWT_EXPIRATION').required().asString()
+    expirationIn: env.get('JWT_EXPIRATION').required().asString(),
+    refreshExpirationIn: env.get('JWT_REFRESH_EXPIRATION').required().asString()
   },
   db: {
     type: env.get('DATABASE_TYPE').required().asString(),
